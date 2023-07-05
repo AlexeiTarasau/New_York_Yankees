@@ -57,6 +57,25 @@ ssh_access=$3
 enable=$4
 
 
+empty_value()
+{
+   if [ -z $user_name ]
+   then
+      echo "Argument user_name is empty"
+      exit 1
+   fi
+
+   if [ -z $home_folder ]
+   then
+      echo "Argument home_folder is empty. ""/home/$user_name"" will be used as the home directory"
+   else
+      echo "Home directory will be created and named $home_folder"
+   fi
+}
+
+empty_value
+
+
 #creating user and user folder
 sudo useradd $user_name
 echo "$user_name has been created"
@@ -73,13 +92,13 @@ fi
 sudo passwd $user_name
 
 #Setting up ssh access
-if [ $ssh_access == "yes" ]; then
+if [ $ssh_access = "yes" ]; then
     echo "Enabling user ssh access: $user_name"
     sudo usermod -aG ssh $user_name
 fi
 
 #Enable or disable an account
-if [ $enable == "yes" ]; then
+if [ $enable = "yes" ]; then
     echo "Enable account: $user_name"
     sudo usermod -e "" $user_name
 else
